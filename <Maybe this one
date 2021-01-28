@@ -1,0 +1,22 @@
+clc; close all; clear all;
+load BBR_Data_S21_v2.mat
+%ambient temp
+T2=21.7+273.15;
+%Sensor radius
+r2=aptdia_m./2;
+%radiator radius
+d1=0.01094;
+r1=d1./2;
+%Radiator offset
+L_off=0.044;
+%Total displacement from radiator to sensor
+L=dist_m+L_off;
+%Radiator temp in Kelvin
+T1=temp+273.15;
+R1=r1./L;
+R2=r2./L;
+S=1+(1+R2.^2)./(R1.^2);
+F12=(S-sqrt(S.^2-4.*(r2./r1).^2))./2;
+A1=pi.*r1.^2;
+Sigma=Qdot_W./(A1.*F12.*(T1.^4-T2.^4));
+sigma=polyfit((A1.*F12.*(T1.^4-T2.^4)),Qdot_W,1);
