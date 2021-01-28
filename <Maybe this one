@@ -22,3 +22,30 @@ A1=pi.*r1.^2;
 %Defining a linear regression with the Steffguy constant as the slope of
 %the linear regression
 sigma=polyfit((A1.*F12.*(T1.^4-T2.^4)),Qdot_W,1);
+
+
+T_1_C = temp;  %Blackbody source temperature [deg C]
+T_amb_C = 21.7; % Ambient temperature [deg C]
+d_1_m = aptdia_m; % Blackbody source aperture diameter [m]
+d_2_m = 0.01094; % Sensor aperture diameter [m]
+L_meas_m = 0.2; % Distance from blackbody aperture to sensor base [m]
+L_off_m = 0.044; % Power Meter Sensor Offset (L_off) [m]
+Q_dot_12_W = Qdot_W; % Radiated power measurement [W]
+
+T_1 = T_1_C + 273.15; %[K] %Blackbody Source Temperature 
+T_amb = T_amb_C + 273.15; %[K] %Ambient Temperature
+T_2 = T_amb; %[K] %Power Meter Temperature 
+L = L_meas_m + L_off_m; %[m] %Power Meter Distance from Blackbody Aperture to Power Meter Aperture 
+r_1 = d_1_m ./ 2; %[m] %Blackbody Source Aperture Radius 
+r_2 = d_2_m ./ 2; %[m] %Power Meter Aperture Radius 
+R_1 = r_1 ./ L; %[-] %Portion of View Factor Calculation 
+R_2 = r_2 ./ L; %[-] %Portion of View Factor Calculation 
+S = 1 + (( 1 + (R_2) .^2) ./ (R_1).^2); %[-] %Portion of View Factor Calculation
+A_1 = pi .* (r_1 .^2); %[m^2] %Source Aperture Area
+F_12 = (S - sqrt( S .^2 - 4 .* (r_2 ./ r_1) .^2)) / 2; %[-] %View Factor Source to Power Meter (Assumption: Coaxial Parallel Aperatures)
+Y = Q_dot_12_W; %[W] %Regression Y
+X = A_1 .* F_12 .* (T_1 .^ 4 - T_2 .^4); %(m^2 * K^4) %Regression X
+
+
+
+ 
