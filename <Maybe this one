@@ -13,10 +13,12 @@ L_off=0.044;
 L=dist_m+L_off;
 %Radiator temp in Kelvin
 T1=temp+273.15;
+%Defining variables for the Vie Factor Equation
 R1=r1./L;
 R2=r2./L;
 S=1+(1+R2.^2)./(R1.^2);
 F12=(S-sqrt(S.^2-4.*(r2./r1).^2))./2;
 A1=pi.*r1.^2;
 Sigma=Qdot_W./(A1.*F12.*(T1.^4-T2.^4));
+%Defining a linear regression to find the Stefann thingy constant as the slope
 sigma=polyfit((A1.*F12.*(T1.^4-T2.^4)),Qdot_W,1);
